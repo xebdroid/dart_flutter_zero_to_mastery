@@ -15,8 +15,7 @@ void main() {
 
   setUp(() {
     mockAdvicerRepository = MockAdvicerRepository();
-    advicerUsecases =
-        AdvicerUsecases(advicerRepository: MockAdvicerRepository());
+    advicerUsecases = AdvicerUsecases(advicerRepository: mockAdvicerRepository);
   });
 
   group('getAdviceUsecase', () {
