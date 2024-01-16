@@ -4,7 +4,12 @@ import 'package:advicer/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+import 'package:advicer/injection.dart';
+import 'injection.dart' as di; // di = dependency injection
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(const MyApp());
 }
 
@@ -20,7 +25,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
       home: BlocProvider(
-        create: (BuildContext context) => AdvicerBloc(),
+        create: (BuildContext context) => sl<AdvicerBloc>(),
         child: AdvicerPage()),
     );
   }

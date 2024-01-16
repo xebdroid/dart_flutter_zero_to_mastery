@@ -3,15 +3,18 @@ import 'package:advicer/domain/failures/failures.dart';
 import 'package:advicer/domain/usecases/advicer_usecases.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
 part 'advicer_event.dart';
 part 'advicer_state.dart';
 
-class AdvicerBloc extends Bloc<AdvicerEvent, AdvicerState> {
-  AdvicerBloc() : super(AdvicerInitial()) {
-    final AdvicerUsecases usecases = AdvicerUsecases();
+const GENERAL_FAILURE_MESSAGE = 'Ups, something gone wrong. Please try again!';
+const SERVER_FAILURE_MESSAGE = 'Ups, API Error. please try again!';
 
+class AdvicerBloc extends Bloc<AdvicerEvent, AdvicerState> {
+  final AdvicerUsecases usecases;
+
+  AdvicerBloc({required this.usecases}) : super(AdvicerInitial()) {
     on<AdvicerRequestedEvent>((event, emit) async {
       emit(AdvicerStateLoading());
 
@@ -23,20 +26,17 @@ class AdvicerBloc extends Bloc<AdvicerEvent, AdvicerState> {
               emit(AdvicerStateError(message: _mapFailureToMessage(failure))),
           (advice) => emit(AdvicerStateLoaded(advice: advice.advice)));
     });
-
-    on<ExampleEvent>((event, emit) {
-      // do something
-    });
   }
-}
 
-String _mapFailureToMessage(Failure failure) {
-  switch (failure.runtimeType) {
-    case ServerFailure:
-      return 'Ups, API Error, please try again!';
-    case GeneralFailure:
-      return 'Ups, something gone wrong, please try again!';
-    default:
-      return 'Ups, something gone wrong, please try again!';
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return SERVER_FAILURE_MESSAGE;
+      case GeneralFailure:
+        return GENERAL_FAILURE_MESSAGE;
+
+      default:
+        return GENERAL_FAILURE_MESSAGE;
+    }
   }
 }
