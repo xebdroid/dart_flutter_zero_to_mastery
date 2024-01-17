@@ -5,5 +5,3 @@ sealed class AdvicerEvent {}
 
 /// event when button is pressed
 class AdvicerRequestedEvent extends AdvicerEvent {}
-
-class ExampleEvent extends AdvicerEvent {}
